@@ -1,0 +1,34 @@
+- name: app deployment
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install Nginx web server
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start nginx service
+      systemd:
+        name: nginx
+        state: started
+
+    - name: Enable Nginx server
+      systemd:
+        name: nginx
+        enabled: yes
+
+    - name: Install git package
+      apt:
+        name: git
+        state: present
+
+    - name: Clone repository to /var/www/html
+      git:
+        repo: https://github.com/adminpratyusha/pipeline-project.git
+        dest: /var/www/html
+
+    - name: restart httpd
+      systemd:
+        name: nginx
+        state: restarted
